@@ -33,7 +33,7 @@ class UserThread extends Thread {
         }
     }
     public void sendMessage(String msg) throws IOException {
-        out.write(LocalTime.now().toString().split("\\.")[0] + " " +msg);
+        out.write(msg);
         out.write("\r\n");
         out.flush();
     }
@@ -68,6 +68,7 @@ public class Server {
     public static void killThread(UserThread user) {
         userArray.remove(user);
         user.interrupt();
+        System.out.println("A user as disconnected");
     }
     public static void broadcast(String msg) throws IOException {
         for (UserThread user : userArray) {
