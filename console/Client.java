@@ -31,12 +31,10 @@ public class Client {
 
     }*/
 
-    public Client(Ui.InitApp app) throws Exception {
+    public Client(Ui.InitApp app, String username, String ipAdresse) throws Exception {
         this.app = app;
-        InetAddress ip = InetAddress.getByName("192.168.1.104");
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Username: ");
-        String user = sc.next();
+        InetAddress ip = InetAddress.getByName(ipAdresse);
+        String user = username;
         System.out.println("connecting...");
         Socket client = new Socket(ip, host);
         System.out.println("Connection established.");

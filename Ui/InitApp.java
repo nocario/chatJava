@@ -1,5 +1,6 @@
 package Ui;
 
+import console.Client;
 import console.ReadThread;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,22 +27,40 @@ public class InitApp extends Application {
 
     private console.Client client;
 
+    private LogWindows log;
+
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) throws Exception {
+        log = new LogWindows();
+        log.start(StageStock.stage);
         Parent root = FXMLLoader.load(getClass().getResource("chatUI.fxml"));
         primaryStage.setTitle("Chatty");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
+        StageStock.stage.setAlwaysOnTop(true);
     }
 
     @FXML
     private void initialize() throws Exception {
-        client = new console.Client(this);
+
+        StageStock.stage.setOnHidden((e) -> {
+            if (ControlLog.getIpAdresse().length() > 0 && ControlLog.getUsername().length() > 0) {
+                try {
+                    client = new Client(this, ControlLog.getUsername(), ControlLog.getIpAdresse());
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+            else {
+                System.exit(-1);
+            }
+        });
 
         buttonSend.setOnAction((e) -> {
             try {
@@ -49,6 +69,12 @@ public class InitApp extends Application {
                 ioException.printStackTrace();
             }
         });
+
+        msgTextArea.textProperty().addListener(((observableValue, s, t1) -> {
+            if (t1.length()%30 == 0) {
+                msgTextArea.appendText("\n");
+            }
+        }));
 
     }
 

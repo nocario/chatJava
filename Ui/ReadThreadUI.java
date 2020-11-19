@@ -7,13 +7,11 @@ import java.net.Socket;
 
 public class ReadThreadUI extends Thread {
 
-    private InitApp app;
-    private Socket client;
+    private final InitApp app;
     private final BufferedReader in;
 
     public ReadThreadUI(Socket client, InitApp app) throws IOException {
         this.app = app;
-        this.client = client;
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
     }
 
